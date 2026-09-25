@@ -1,0 +1,12 @@
+name = "actuent-lawp"
+main = "src/worker.js"
+compatibility_date = "2026-09-01"
+
+# After deploying, add a route in Cloudflare → Workers Routes:
+#   yoursite.com/.well-known/lawp.json   →   actuent-lawp
+
+[vars]
+# Optional: a complete LAWP document as JSON (overrides the automatic one)
+LAWP_JSON = ""
+# Optional: a JSON array of extra actions, e.g. with endpoints for executable actions
+LAWP_ACTIONS = ""
