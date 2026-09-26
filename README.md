@@ -9,12 +9,26 @@ This Cloudflare Worker serves `https://yoursite.com/.well-known/lawp.json` ([LAW
 ## Setup
 
 1. Click **Deploy to Cloudflare** above.
-2. In Cloudflare, go to **Workers Routes → Add route**:
-   - Route: `yoursite.com/.well-known/lawp.json`
-   - Worker: `actuent-lawp`
+2. In Cloudflare, go to **Workers Routes → Add route** with Worker `actuent-lawp`, for:
+   - `yoursite.com/.well-known/lawp.json`
+   - `yoursite.com/llms.txt`
 3. Open `https://yoursite.com/.well-known/lawp.json` to see what AI agents see, and check it with the [LAWP Checker](https://docs.actuent.ai/#checker).
 
-Only that one path is handled; the rest of your site is untouched.
+Only those paths are handled; the rest of your site is untouched.
+
+## llms.txt
+
+The Worker also serves [`/llms.txt`](https://llmstxt.org), a Markdown summary of your site for AI, made from the same pages. If your site already has its own `llms.txt`, yours is served instead. Set `LLMS_TXT` to `off` to turn it off.
+
+## AI bot visits (optional)
+
+See how often GPTBot, ClaudeBot, PerplexityBot and other AI bots visit your site, in [Actuent Analytics](https://analytics.actuent.ai):
+
+1. Claim your site in Analytics → My sites.
+2. Add your Actuent Pro API key as an encrypted variable named `ACTUENT_API_KEY`.
+3. Use a single route, `yoursite.com/*`, instead of the two above. Every request passes straight through to your site; the Worker only looks at the user agent.
+
+Only the bot's name and a daily count are sent, batched about once a minute. Nothing about human visitors is counted or sent.
 
 ## Customise (optional)
 

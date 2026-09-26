@@ -2,11 +2,18 @@ name = "actuent-lawp"
 main = "src/worker.js"
 compatibility_date = "2026-09-01"
 
-# After deploying, add a route in Cloudflare → Workers Routes:
+# After deploying, add routes in Cloudflare → Workers Routes:
 #   yoursite.com/.well-known/lawp.json   →   actuent-lawp
+#   yoursite.com/llms.txt                →   actuent-lawp
+# Or one route, yoursite.com/*, to also count AI bot visits (set ACTUENT_API_KEY as a secret).
 
 [vars]
 # Optional: a complete LAWP document as JSON (overrides the automatic one)
 LAWP_JSON = ""
 # Optional: a JSON array of extra actions, e.g. with endpoints for executable actions
 LAWP_ACTIONS = ""
+# Set to "off" to not serve /llms.txt
+LLMS_TXT = ""
+# Secret (Settings → Variables → Encrypt): your Actuent Pro API key, to report AI bot visits for a
+# site you've claimed in analytics.actuent.ai. Only bot names and daily counts are sent.
+# ACTUENT_API_KEY
