@@ -89,8 +89,7 @@ export async function buildLawp(origin, env = {}) {
   const email = home?.match(/mailto:([^"'?\s>]+@[^"'?\s>]+)/i)?.[1]
   if (email) actions.push({
     id: "contact", name: "Contact", description: `Email ${decode(email)}`,
-    intent: ["contact", "email", "get in touch", "message"], input: { type: "text", required: false },
-    url: `mailto:${decode(email)}`
+    intent: ["contact", "email", "get in touch", "message"], input: { type: "text", required: false }
   })
   const extra = parseJson(env.LAWP_ACTIONS)
   if (Array.isArray(extra)) for (const a of extra) if (a && a.id) actions.push(a)
