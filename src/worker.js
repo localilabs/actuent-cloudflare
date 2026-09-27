@@ -89,15 +89,17 @@ export async function buildLawp(origin, env = {}) {
   const email = home?.match(/mailto:([^"'?\s>]+@[^"'?\s>]+)/i)?.[1]
   if (email) actions.push({
     id: "contact", name: "Contact", description: `Email ${decode(email)}`,
-    intent: ["contact", "email", "get in touch", "message"], input: { type: "text", required: false }
+    intent: ["contact", "email", "get in touch", "message"], input: { type: "text", required: false },
+    url: `mailto:${decode(email)}`
   })
   const extra = parseJson(env.LAWP_ACTIONS)
   if (Array.isArray(extra)) for (const a of extra) if (a && a.id) actions.push(a)
 
   const language = home?.match(/<html[^>]+lang=["']([a-z]{2})/i)?.[1]?.toLowerCase()
   return {
-    lawp_version: "0.3", domain: host, name, ...(language ? { language } : {}),
-    pages, actions, generator: "Actuent LAWP for Cloudflare 1.1.0"
+    lawp_version: "0.4", domain: host, name, ...(language ? { language } : {}),
+    updated_at: new Date().toISOString(), ttl: CACHE_SECONDS,
+    pages, actions, generator: "Actuent LAWP for Cloudflare 1.2.0"
   }
 }
 
@@ -180,6 +182,12 @@ export default {
       if (own.ok && !(own.headers.get("content-type") || "").includes("html")) return own
       return cachedResponse(new Request(url.origin + LLMS_PATH), ctx, async () => llmsTxt(await buildLawp(url.origin, env), url.origin), "text/markdown; charset=utf-8")
     }
-    return fetch(request) // Everything else goes to your site untouched.
+    // Everything else goes to your site untouched, except that HTML pages get a LAWP 0.4 discovery
+    // header (Link: <…/.well-known/lawp.json>; rel="lawp") when the Worker runs on all routes.
+    const response = await fetch(request)
+    if (!(response.headers.get("content-type") || "").includes("text/html") || /rel="?lawp/.test(response.headers.get("link") || "")) return response
+    const withLink = new Response(response.body, response)
+    withLink.headers.append("Link", `<${url.origin}${PATH}>; rel="lawp"`)
+    return withLink
   }
 }

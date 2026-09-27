@@ -30,6 +30,8 @@ See how often GPTBot, ClaudeBot, PerplexityBot and other AI bots visit your site
 
 Only the bot's name and a daily count are sent, batched about once a minute. Nothing about human visitors is counted or sent.
 
+With the `yoursite.com/*` route, every HTML page also gets a `Link: <…/.well-known/lawp.json>; rel="lawp"` header, so agents that start from any page can find your LAWP ([LAWP 0.4 discovery](https://github.com/localilabs/lawp/blob/main/LAWP.md#discovery-v04)).
+
 ## Customise (optional)
 
 In the Worker's **Settings → Variables**:
