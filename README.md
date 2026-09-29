@@ -1,3 +1,5 @@
+<p align="center"><img src="https://api.actuent.ai/assets/lawpy/lawpy-dance.gif" width="108" height="72" alt="Lawpy, the Actuent mascot, dancing"></p>
+
 # Actuent LAWP for Cloudflare
 
 Make any website on Cloudflare readable and actionable by AI agents in one click, without touching your site's code.
